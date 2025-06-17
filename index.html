@@ -49,7 +49,7 @@
     <h2 align="center">Multi-Channel Speech Enhancement for Cocktail Party Speech Emotion Recognition</h2>
     <p style="line-height:100%" align="justify"> <b>Abstract: </b>This paper highlights the critical importance of multi-channel speech enhancement (MCSE) for speech emotion recognition (ER) in cocktail party scenarios. A multi-channel speech dereverberation and separation front-end integrating DNN-WPE and mask-based MVDR is used to extract the target speaker's speech from the mixture, before being fed into the downstream ER back-end using HuBERT- and ViT-based speech and visual features. Experiments on mixture speech constructed using the IEMOCAP dataset suggest the MCSE output consistently outperforms domain fine-tuned single-channel speech representations produced by: a) Conformer-based metric GANs; and b) WavLM SSL features with optional further SE-ER dual task fine-tuning. Statistically significant increase of weighted, unweighted accuracy and F1 measures by up to 9.5%, 8.5% and 9.1% absolute (17.1%, 14.7% and 16.0% relative) are obtained over the above single-channel baselines. Consistent speech enhancement improvements were also obtained on PESQ, STOI and SRMR scores.</p>
     <a href="#sectionI">I. Multi-channel Speech Enhancement Front-end Architectures</a><br>
-    <a href="#sectionII">II. Three pipelined Mulit-channel Speech Enhancement and Emotion Recognition Systems</a><br>
+    <a href="#sectionII">II. Three Pipelined Emotion Recognition Systems</a><br>
     <a href="#sectionIII">III. Experimental Setup and Results</a><br>
     <a href="#sectionIV">IV. Reference</a>
     <h3> <a name="sectionI"> I. Multi-channel Speech Enhancement Front-end Architectures </a> </h3>
@@ -65,15 +65,15 @@
     <div style="border: none; width:60%; margin: 0 auto;">
     <img border="0" src="tcn.png" alt="TCN block and Visual Conv1DBlock" height="5%">
     </div>
-    <h3> <a name="sectionII">II. Three pipelined Emotion Recognition Systems </a> </h3>
+    <h3> <a name="sectionII">II. Three Pipelined Emotion Recognition Systems </a> </h3>
     <div style="border: none; width:70%; margin: 0 auto;">
     <img border="0" src="arch.png" alt="architectures of emotion recognition systems" height="20%">
     </div>
     <p style="line-height:100%" align="justify"> <b> Three fine-tuning methods are investigated When training the systems:</b> </p>
     <ul>
-        <li> Only fine-tuning the back-end ASR component using the enhanced speech outputs while the front-end remains unchanged. </li>
-        <li> End-to-end jointly fine-tuning the entire system including the speech enhancement front-end and the recognition back-end components using the ASR cost function. </li>
-        <li> End-to-end jointly fine-tuning the entire system using a multi-task criterion interpolation between the speech enhancement and recognition cost functions. </li>
+        <li> Audio-only ER system (MCSE-ER (Audio-only)). </li>
+        <li> Early-fusion audio-visual ER system using cross-modal attention-based fusion block (MCSE-ER (AV-Early)). </li>
+        <li> Late-fusion audio-visual ER system using the weights of audio (w_audio) and visual (w_visual) to calculate the final classified probability (MCSE-ER (AV-Late)). </li>
     </ul>
     <h3> <a name="sectionIII">III. Experimental Setup and Results</a></h3>
     <div style="border: none; width:100%; margin: 0 auto;">
