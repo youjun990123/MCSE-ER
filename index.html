@@ -62,7 +62,7 @@
     <ul>
         <li> The internal structural details of the TCN block and Visual Conv1DBlock are shown as following: </li>
     </ul>
-    <div style="border: none; width:20%; margin: 0 auto;">
+    <div style="border: none; width:50%; margin: 0 auto;">
     <img border="0" src="tcn.png" alt="TCN block and Visual Conv1DBlock" height="5%">
     </div>
     <h3> <a name="sectionII">II. Three Pipelined Emotion Recognition Systems </a> </h3>
@@ -79,9 +79,9 @@
     <div style="border: none; width:100%; margin: 0 auto;">
     <h4> A. Experimental setup </h4>
         <ul>
-            <li> A 15-channel symmetric linear array with non-even inter-channel spacing is leveraged to simulate the multi-channel overlapped-reverberant-noisy mixture speech using the Oxford LRS2 dataset [3] with 96997, 4272 and 4972 utterances respectively for training (91.37 hours), validation (2.59 hours) and test (2.32 hours). </li>
-            <li> 1200 (0.5 hours) utterances are recorded by replaying two loudspeakers simultaneously to generate a 15-channel overlapped-reverberant-noisy mixture speech in a meeting room [1], based on the Oxford LRS2 test set. The geometric specification of the microphone array used during recording is the same as that used in the simulation. </li>
-            <li> Espnet style Conformer AED ASR model [4] contains 12 encoder and 6 decoder layers is used in the submitted paper. </li>
+            <li> A 15-channel symmetric linear array with non-even inter-channel spacing is leveraged to simulate the multi-channel overlapped-reverberant-noisy mixture speech using the IEMOCAP dataset [2] with total of 5,531 utterances with 4 different emotion labels. </li>
+            <li> For the detailed  preocess of parameter setting and simulation, please refer to Section V.A of the submitted manuscript. </li>
+            <li> The task fine-tuned HuBERT [3] and ViT [4] are used as the audio and visual encoders, respectively. </li>
         </ul>
     <h4> B. Experimental results of speech enhancement front-end outputs and emotion recognition results on the simulated IEMOCAP mixture speech </h4>
     <table border="1">
@@ -271,10 +271,9 @@
     </div>
 <h3><a name="sectionIV">IV. Reference</a></h3>
 <p> [1] G. Li et al., “Audio-visual end-to-end multi-channel speech separation, dereverberation and recognition,” TASLP, vol. 31, pp. 2707–2723, 2023.</p>
-<p> [1] J. Yu et al., “Audio-visual multi-channel recognition of overlapped speech,” in INTERSPEECH, 2020, pp. 3496–3500.</p>
-<p> [2] G. Li et al., “Audio-visual multi-channel speech separation, dereverberation and recognition,” in ICASSP, 2022, pp. 6042–6046.</p>
-<p> [3] J. Son Chung et al., “Lip reading sentences in the wild,” in IEEE Conf. Comput. Vis. Pattern Recognit., 2017, pp. 6447–6456. </p>
-<p> [4] A. Gulati et al., “Conformer: Convolution-augmented transformer for speech recognition,” in INTERSPEECH, 2020, pp. 5036–5040</p>
+<p> [2] C. Busso et al., “IEMOCAP: interactive emotional dyadic motion capture database,” LANG RESOUR EVAL, vol. 42, no. 4, pp. 335–359, 2008.</p>
+<p> [3] https://huggingface.co/facebook/hubert-large-ls960-ft </p>
+<p> [4] https://huggingface.co/dima806/facial_emotions_image_detection </p>
 
 
 </body>
