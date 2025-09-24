@@ -1,283 +1,468 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Audio-visual End-to-end Multi-channel Speech Separation, Dereverberation and Recognition</title>
-<style type="text/css">
-<!--  body {-->
-<!--  margin: 0  auto；-->
-<!--  padding:10px 30px;-->
-<!--  background: #fff;-->
-<!--  color: #111;-->
-<!--  font-size: 15px;-->
-<!--  font-family: "Times New Roman", serif;-->
-<!--  font-weight: 400;-->
-<!--  line-height: 1.8;-->
-<!--  -webkit-font-smoothing: antialiased;-->
-<!--  }-->
-  audio {  
-  width: 75%;
-  height:30px;
-  }
-  img {
-  width:100%;
-  }
-  video {
-  width:75%;
-  }
-  html{
-  height:100%;
-  }
-  body{
-  margin: 0  auto；
-  padding:10px 30px;
-  background: #fff;
-  color: #111;
-  height:100%;
-  font-size: 17px;
-  font-family: "Times New Roman", serif;
-  font-weight: 400;
-  line-height: 1.8;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  }
-</style>
+  <style type="text/css">
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --light-bg: #f8f9fa;
+      --border-color: #e0e0e0;
+      --text-color: #333;
+      --light-text: #666;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    html {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      margin: 0 auto;
+      padding: 20px 30px;
+      background: #fff;
+      color: var(--text-color);
+      font-size: 16px;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-weight: 400;
+      line-height: 1.7;
+      max-width: 1200px;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    h1, h2, h3, h4 {
+      color: var(--primary-color);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    
+    h2 {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-top: 2em;
+    }
+    
+    h3 {
+      margin-top: 1.8em;
+    }
+    
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+    
+    .authors {
+      text-align: center;
+      margin: 15px 0 25px;
+      color: var(--light-text);
+      font-style: italic;
+    }
+    
+    .abstract {
+      background-color: var(--light-bg);
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 25px 0;
+      padding: 15px;
+      background-color: var(--light-bg);
+      border-radius: 5px;
+    }
+    
+    .nav-links a {
+      font-weight: bold;
+    }
+    
+    .figure-container {
+      margin: 25px auto;
+      text-align: center;
+    }
+    
+    .figure-container img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .figure-caption {
+      font-style: italic;
+      margin-top: 8px;
+      color: var(--light-text);
+      font-size: 0.9em;
+    }
+    
+    audio, video {
+      width: 100%;
+      max-width: 500px;
+      margin: 10px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 12px 15px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    
+    th {
+      background-color: var(--light-bg);
+      font-weight: bold;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .media-cell {
+      min-width: 200px;
+    }
+    
+    .media-cell img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    
+    ul {
+      padding-left: 20px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+    }
+    
+    .reference {
+      margin-bottom: 15px;
+      padding-left: 20px;
+      text-indent: -20px;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+        font-size: 15px;
+      }
+      
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      table {
+        font-size: 14px;
+      }
+      
+      th, td {
+        padding: 8px 10px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+        font-size: 14px;
+      }
+      
+      h2 {
+        font-size: 1.5em;
+      }
+      
+      h3 {
+        font-size: 1.3em;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
 </head>
-<div style="border: none; width:80%; margin: 0 auto;">
 <body>
-    <h2 align="center">Multi-Channel Speech Enhancement for Cocktail Party Speech Emotion Recognition</h2>
-    <p style="line-height:100%" align="center"><b>Authors:</b>Youjun Chen, Guinan Li, Mengzhe Geng, Xurong Xie, Shujie Hu, Huimeng Wang, Haoning Xu, Chengxi Deng, Jiajun Deng, Zhaoqing Li, Mingyu Cui, Xunying Liu</p>
-    <p style="line-height:100%" align="justify"> <b>Abstract:</b>This paper highlights the critical importance of multi-channel speech enhancement (MCSE) for speech emotion recognition (ER) in cocktail party scenarios. A multi-channel speech dereverberation and separation front-end integrating DNN-WPE and mask-based MVDR is used to extract the target speaker's speech from the mixture speech, before being fed into the downstream ER back-end using HuBERT- and ViT-based speech and visual features. Experiments on mixture speech constructed using the IEMOCAP and MSP-FACE datasets suggest the MCSE output consistently outperforms domain fine-tuned single-channel speech representations produced by: a) Conformer-based metric GANs; and b) WavLM SSL features with optional SE-ER dual task fine-tuning. Statistically significant increases in weighted, unweighted accuracy and F1 measures by up to 9.5%, 8.5% and 9.1% absolute (17.1%, 14.7% and 16.0% relative) are obtained over the above single-channel baselines. The generalization of IEMOCAP trained MCSE front-ends are also shown when being zero-shot applied to out-of-domain MSP-FACE data.</p>
-    <a href="#sectionI">I. Multi-channel Speech Enhancement Front-end Architectures</a><br>
-    <a href="#sectionII">II. Three Pipelined Emotion Recognition Systems</a><br>
-    <a href="#sectionIII">III. Experimental Setup and Results</a><br>
-    <a href="#sectionIV">IV. Reference</a>
-    <h3> <a name="sectionI"> I. Multi-channel Speech Enhancement Front-end Architectures </a> </h3>
-    <div style="border: none; width:60%; margin: 0 auto;">
-    <img border="0" src="frontend.png" alt="architectures of speech enhancement front-end" height="10%">
+  <div class="container">
+    <h1 style="text-align: center; margin-top: 0;">Multi-Channel Speech Enhancement for Cocktail Party Speech Emotion Recognition</h1>
+    
+    <p class="authors"><b>Authors:</b> Youjun Chen, Guinan Li, Mengzhe Geng, Xurong Xie, Shujie Hu, Huimeng Wang, Haoning Xu, Chengxi Deng, Jiajun Deng, Zhaoqing Li, Mingyu Cui, Xunying Liu</p>
+    
+    <div class="abstract">
+      <p><b>Abstract:</b> This paper highlights the critical importance of multi-channel speech enhancement (MCSE) for speech emotion recognition (ER) in cocktail party scenarios. A multi-channel speech dereverberation and separation front-end integrating DNN-WPE and mask-based MVDR is used to extract the target speaker's speech from the mixture speech, before being fed into the downstream ER back-end using HuBERT- and ViT-based speech and visual features. Experiments on mixture speech constructed using the IEMOCAP and MSP-FACE datasets suggest the MCSE output consistently outperforms domain fine-tuned single-channel speech representations produced by: a) Conformer-based metric GANs; and b) WavLM SSL features with optional SE-ER dual task fine-tuning. Statistically significant increases in weighted, unweighted accuracy and F1 measures by up to 9.5%, 8.5% and 9.1% absolute (17.1%, 14.7% and 16.0% relative) are obtained over the above single-channel baselines. The generalization of IEMOCAP trained MCSE front-ends are also shown when being zero-shot applied to out-of-domain MSP-FACE data.</p>
     </div>
-    <ul>
-        <li> In the pipelined integrated MCSE front-end, DNN-WPE based speech dereverberation is followed by mask-based MVDR speech separation, which can produce the best overall speech enhancement and recognition performance [1].</li>
-    </ul>
-    <ul>
-        <li> The internal structural details of the TCN block and Visual Conv1DBlock are shown as following: </li>
-    </ul>
-    <div style="border: none; width:50%; margin: 0 auto;">
-    <img border="0" src="tcn.png" alt="TCN block and Visual Conv1DBlock" height="5%">
+    
+    <div class="nav-links">
+      <a href="#sectionI">I. Multi-channel Speech Enhancement Front-end Architectures</a>
+      <a href="#sectionII">II. Three Pipelined Emotion Recognition Systems</a>
+      <a href="#sectionIII">III. Experimental Setup and Results</a>
+      <a href="#sectionIV">IV. Reference</a>
     </div>
-    <h3> <a name="sectionII">II. Three Pipelined Emotion Recognition Systems </a> </h3>
-    <div style="border: none; width:70%; margin: 0 auto;">
-    <img border="0" src="architecture.png" alt="architectures of emotion recognition systems" height="20%">
+    
+    <h2 id="sectionI">I. Multi-channel Speech Enhancement Front-end Architectures</h2>
+    
+    <div class="figure-container" style="width: 80%;">
+      <img src="frontend.png" alt="Architectures of speech enhancement front-end">
+      <p class="figure-caption">Figure 1: Architectures of the speech enhancement front-end</p>
     </div>
-    <p style="line-height:100%" align="justify"> <b> Three emotion recognition decoders are designed for audio-only and audio-visual ER systems:</b> </p>
+    
     <ul>
-        <li> Audio-only ER system (MCSE-ER (Audio-only)). </li>
-        <li> Early-fusion audio-visual ER system using cross-modal attention-based fusion block (MCSE-ER (AV-Early)). </li>
-        <li> Late-fusion audio-visual ER system using the weights of audio (w_audio) and visual (w_visual) to calculate the final classified probability (MCSE-ER (AV-Late)). </li>
+      <li>In the pipelined integrated MCSE front-end, DNN-WPE based speech dereverberation is followed by mask-based MVDR speech separation, which can produce the best overall speech enhancement and recognition performance [1].</li>
+      <li>The internal structural details of the TCN block and Visual Conv1DBlock are shown as following:</li>
     </ul>
-    <h3> <a name="sectionIII">III. Experimental Setup and Results</a></h3>
-    <div style="border: none; width:100%; margin: 0 auto;">
-    <h4> A. Experimental setup </h4>
-        <ul>
-            <li> A 15-channel symmetric linear array with non-even inter-channel spacing is leveraged to simulate the multi-channel overlapped-reverberant-noisy mixture speech using the IEMOCAP dataset [2] with total of 5,531 utterances with 4 different emotion labels. </li>
-            <li> For the detailed  preocess of parameter setting and simulation, please refer to Section V.A of the submitted manuscript. </li>
-            <li> The resulting simulated dataset contains 110,620 utterances, totalling 140 hours. </li>
-            <li> The task fine-tuned HuBERT [3] and ViT [4] are used as the audio and visual encoders, respectively. </li>
-        </ul>
-    <h4> B. Experimental results of speech enhancement front-end outputs on the simulated IEMOCAP mixture speech </h4>
-    <table border="1">
-    	<tr>
-        	<th rowspan="2" colspan="2"></th>
-        	<th colspan="4"> Four examples on the mixture speech with different emotion labels </th>
-        </tr>
-        <tr>
-            <th>Sad</th>
-            <th>Happy</th>
-            <th>Neutral</th>
-            <th>Angry</th>
-        </tr>
-          <tr>
-            <th colspan="2"> Target speaker video</th>
-            <td style="text-align:center">
-                <video src="sad.mp4" controls="controls">
-                    your browser does not support the video tag
-                </video>
-            </td>
-            <td style="text-align:center">
-                <video src="happy.mp4" controls="controls">
-                    your browser does not support the video tag
-                </video>
-            </td>
-            <td style="text-align:center">
-                <video src=neutral.mp4 controls="controls">
-                    your browser does not support the video tag
-                </video>
-            </td>
-            <td style="text-align:center">
-                <video src=angry.mp4 controls="controls">
-                    your browser does not support the video tag
-                </video>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2"> Target speech emotion label </th>
-            <th>Sad</th>
-            <th>Happy</th>
-            <th>Neutral</th>
-            <th>Angry</th>
-        </tr>
-        <tr>
-            <th colspan="2"> Interfering speech emotion label </th>
-            <th>Angry</th>
-            <th>Angry</th>
-            <th>Sad</th>
-            <th>Happy</th>
-        </tr>
-        <tr>
-            <th colspan="2"> Target clean speech</th>
-             <td style="text-align:center">
-                <img src="sad_clean.png" alt>
-                <audio src="sad_clean.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-              <td style="text-align:center">
-                <img src="happy_clean.png" alt>
-                <audio src="happy_clean.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="neutral_clean.png" alt>
-                <audio src="neutral_clean.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="angry_clean.png" alt>
-                <audio src="angry_clean.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">Mixture <br> (overlapped-reverberant-noisy) </th>
-            <td style="text-align:center">
-                <img src="sad_mixture.png" alt>
-                <audio src="sad_mixture.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="happy_mixture.png" alt>
-                <audio src="happy_mixture.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="neutral_mixture.png" alt>
-                <audio src="neutral_mixture.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="angry_mixture.png" alt>
-                <audio src="angry_mixture.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">Enhanced by speech dereverberation</th>
-            <td style="text-align:center">
-                <img src="sad_dervb.png" alt>
-                <audio src="sad_dervb.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-              <td style="text-align:center">
-                <img src="happy_dervb.png" alt>
-                <audio src="happy_dervb.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="neutral_dervb.png" alt>
-                <audio src="neutral_dervb.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="angry_dervb.png" alt>
-                <audio src="angry_dervb.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">Enhanced by speech separation</th>
-            <td style="text-align:center">
-                <img src="sad_mvdr.png" alt>
-                <audio src="sad_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-              <td style="text-align:center">
-                <img src="happy_mvdr.png" alt>
-                <audio src="happy_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="neutral_mvdr.png" alt>
-                <audio src="neutral_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="angry_mvdr.png" alt>
-                <audio src="angry_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">Enhanced by speech dereverberation and separation</th>
-            <td style="text-align:center">
-                <img src="sad_dervb_mvdr.png" alt>
-                <audio src="sad_dervb_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-              <td style="text-align:center">
-                <img src="happy_dervb_mvdr.png" alt>
-                <audio src="happy_dervb_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="neutral_dervb_mvdr.png" alt>
-                <audio src="neutral_dervb_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-            <td style="text-align:center">
-                <img src="angry_dervb_mvdr.png" alt>
-                <audio src="angry_dervb_mvdr.wav" controls="controls">
-                    Your browser does not support the audio element.
-                </audio>
-            </td>
-        </tr>
+    
+    <div class="figure-container" style="width: 60%;">
+      <img src="tcn.png" alt="TCN block and Visual Conv1DBlock">
+      <p class="figure-caption">Figure 2: TCN block and Visual Conv1DBlock details</p>
+    </div>
+    
+    <h2 id="sectionII">II. Three Pipelined Emotion Recognition Systems</h2>
+    
+    <div class="figure-container" style="width: 90%;">
+      <img src="architecture.png" alt="Architectures of emotion recognition systems">
+      <p class="figure-caption">Figure 3: Architectures of the three emotion recognition systems</p>
+    </div>
+    
+    <p><b>Three emotion recognition decoders are designed for audio-only and audio-visual ER systems:</b></p>
+    <ul>
+      <li>Audio-only ER system (MCSE-ER (Audio-only)).</li>
+      <li>Early-fusion audio-visual ER system using cross-modal attention-based fusion block (MCSE-ER (AV-Early)).</li>
+      <li>Late-fusion audio-visual ER system using the weights of audio (w_audio) and visual (w_visual) to calculate the final classified probability (MCSE-ER (AV-Late)).</li>
+    </ul>
+    
+    <h2 id="sectionIII">III. Experimental Setup and Results</h2>
+    
+    <h3>A. Experimental setup</h3>
+    <ul>
+      <li>A 15-channel symmetric linear array with non-even inter-channel spacing is leveraged to simulate the multi-channel overlapped-reverberant-noisy mixture speech using the IEMOCAP dataset [2] with total of 5,531 utterances with 4 different emotion labels.</li>
+      <li>For the detailed process of parameter setting and simulation, please refer to Section V.A of the submitted manuscript.</li>
+      <li>The resulting simulated dataset contains 110,620 utterances, totalling 140 hours.</li>
+      <li>The task fine-tuned HuBERT [3] and ViT [4] are used as the audio and visual encoders, respectively.</li>
+    </ul>
+    
+    <h3>B. Experimental results of speech enhancement front-end outputs on the simulated IEMOCAP mixture speech</h3>
+    
+    <table>
+      <tr>
+        <th rowspan="2" colspan="2"></th>
+        <th colspan="4">Four examples on the mixture speech with different emotion labels</th>
+      </tr>
+      <tr>
+        <th>Sad</th>
+        <th>Happy</th>
+        <th>Neutral</th>
+        <th>Angry</th>
+      </tr>
+      <tr>
+        <th colspan="2">Target speaker video</th>
+        <td class="media-cell">
+          <video src="sad.mp4" controls="controls">
+            Your browser does not support the video tag
+          </video>
+        </td>
+        <td class="media-cell">
+          <video src="happy.mp4" controls="controls">
+            Your browser does not support the video tag
+          </video>
+        </td>
+        <td class="media-cell">
+          <video src="neutral.mp4" controls="controls">
+            Your browser does not support the video tag
+          </video>
+        </td>
+        <td class="media-cell">
+          <video src="angry.mp4" controls="controls">
+            Your browser does not support the video tag
+          </video>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Target speech emotion label</th>
+        <th>Sad</th>
+        <th>Happy</th>
+        <th>Neutral</th>
+        <th>Angry</th>
+      </tr>
+      <tr>
+        <th colspan="2">Interfering speech emotion label</th>
+        <th>Angry</th>
+        <th>Angry</th>
+        <th>Sad</th>
+        <th>Happy</th>
+      </tr>
+      <tr>
+        <th colspan="2">Target clean speech</th>
+        <td class="media-cell">
+          <img src="sad_clean.png" alt="Sad clean speech spectrogram">
+          <audio src="sad_clean.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="happy_clean.png" alt="Happy clean speech spectrogram">
+          <audio src="happy_clean.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="neutral_clean.png" alt="Neutral clean speech spectrogram">
+          <audio src="neutral_clean.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="angry_clean.png" alt="Angry clean speech spectrogram">
+          <audio src="angry_clean.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Mixture<br>(overlapped-reverberant-noisy)</th>
+        <td class="media-cell">
+          <img src="sad_mixture.png" alt="Sad mixture speech spectrogram">
+          <audio src="sad_mixture.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="happy_mixture.png" alt="Happy mixture speech spectrogram">
+          <audio src="happy_mixture.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="neutral_mixture.png" alt="Neutral mixture speech spectrogram">
+          <audio src="neutral_mixture.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="angry_mixture.png" alt="Angry mixture speech spectrogram">
+          <audio src="angry_mixture.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Enhanced by speech dereverberation</th>
+        <td class="media-cell">
+          <img src="sad_dervb.png" alt="Sad dereverberated speech spectrogram">
+          <audio src="sad_dervb.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="happy_dervb.png" alt="Happy dereverberated speech spectrogram">
+          <audio src="happy_dervb.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="neutral_dervb.png" alt="Neutral dereverberated speech spectrogram">
+          <audio src="neutral_dervb.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="angry_dervb.png" alt="Angry dereverberated speech spectrogram">
+          <audio src="angry_dervb.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Enhanced by speech separation</th>
+        <td class="media-cell">
+          <img src="sad_mvdr.png" alt="Sad separated speech spectrogram">
+          <audio src="sad_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="happy_mvdr.png" alt="Happy separated speech spectrogram">
+          <audio src="happy_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="neutral_mvdr.png" alt="Neutral separated speech spectrogram">
+          <audio src="neutral_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="angry_mvdr.png" alt="Angry separated speech spectrogram">
+          <audio src="angry_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">Enhanced by speech dereverberation and separation</th>
+        <td class="media-cell">
+          <img src="sad_dervb_mvdr.png" alt="Sad fully enhanced speech spectrogram">
+          <audio src="sad_dervb_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="happy_dervb_mvdr.png" alt="Happy fully enhanced speech spectrogram">
+          <audio src="happy_dervb_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="neutral_dervb_mvdr.png" alt="Neutral fully enhanced speech spectrogram">
+          <audio src="neutral_dervb_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+        <td class="media-cell">
+          <img src="angry_dervb_mvdr.png" alt="Angry fully enhanced speech spectrogram">
+          <audio src="angry_dervb_mvdr.wav" controls="controls">
+            Your browser does not support the audio element.
+          </audio>
+        </td>
+      </tr>
     </table>
-    </div>
-<h3><a name="sectionIV">IV. Reference</a></h3>
-<p> [1] G. Li et al., “Audio-visual end-to-end multi-channel speech separation, dereverberation and recognition,” TASLP, vol. 31, pp. 2707–2723, 2023.</p>
-<p> [2] C. Busso et al., “IEMOCAP: interactive emotional dyadic motion capture database,” LANG RESOUR EVAL, vol. 42, no. 4, pp. 335–359, 2008.</p>
-<p> [3] https://huggingface.co/facebook/hubert-large-ls960-ft </p>
-<p> [4] https://huggingface.co/dima806/facial_emotions_image_detection </p>
-
-
+    
+    <h2 id="sectionIV">IV. Reference</h2>
+    
+    <p class="reference">[1] G. Li et al., "Audio-visual end-to-end multi-channel speech separation, dereverberation and recognition," TASLP, vol. 31, pp. 2707–2723, 2023.</p>
+    <p class="reference">[2] C. Busso et al., "IEMOCAP: interactive emotional dyadic motion capture database," LANG RESOUR EVAL, vol. 42, no. 4, pp. 335–359, 2008.</p>
+    <p class="reference">[3] https://huggingface.co/facebook/hubert-large-ls960-ft</p>
+    <p class="reference">[4] https://huggingface.co/dima806/facial_emotions_image_detection</p>
+  </div>
 </body>
-</div>
 </html>
